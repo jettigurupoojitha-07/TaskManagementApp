@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>Task Dashboard</h1>
+
+<form method="GET">
+
+    <input
+    type="text"
+    name="search"
+    placeholder="Search Tasks">
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<br>
+
+<a href="/dashboard">
+    All Tasks
+</a>
+
+|
+
+<a href="/dashboard?status=Pending">
+    Pending
+</a>
+
+|
+
+<a href="/dashboard?status=Completed">
+    Completed
+</a>
+
+<br><br>
+
+<a href="/logout">
+    Logout
+</a>
+
+<br><br>
+
+<a href="/add-task">
+    Add New Task
+</a>
+
+<hr>
+
+{% for task in tasks %}
+
+<div class="task-card">
+
+    <h3>{{ task.title }}</h3>
+
+    <p>{{ task.description }}</p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ task.status }}
+    </p>
+
+    <p>
+        <strong>Priority:</strong>
+        {{ task.priority }}
+    </p>
+
+    <p>
+        <strong>Due Date:</strong>
+        {{ task.due_date }}
+    </p>
+
+    <a href="/edit/{{ task.id }}">
+        Edit
+    </a>
+
+    |
+
+    <a href="/delete/{{ task.id }}">
+        Delete
+    </a>
+
+</div>
+
+{% endfor %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+
+<script>
+const socket = io();
+
+socket.on('task_updated', function() {
+    location.reload();
+});
+</script>
+
+</body>
+</html>
